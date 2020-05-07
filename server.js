@@ -1,6 +1,9 @@
 const express = require('express');
+const connectDB = require('./config/db');
 
 const app = express();
+
+connectDB();//to connect to my mongodb
 
 app.get('/', (req,res) => res.send('API running'))
 //added in a callback function for after endpoint is hit...

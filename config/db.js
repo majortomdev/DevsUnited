@@ -4,7 +4,7 @@ const db = config.get('mongoURI');
 
 const connectDB = async () =>  {
     try {
-        await mongoose.connect(db, { //had2 add dis object as an extra parameter due to runtime warning 
+        await mongoose.connect(db, { //had2 add this obj as an extra parameter due to 2 runtime warnings 
             useNewUrlParser: true,
             useUnifiedTopology: true
         });

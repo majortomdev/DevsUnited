@@ -5,7 +5,7 @@ const app = express();
 
 connectDB();//to connect to my mongodb
 
-app.get('/', (req,res) => res.send('API running'))
+app.get('/boxes', (req,res) => res.send('API running'))
 //added in a callback function for after endpoint is hit...
 
 app.use('/api/users', require('./routes/api/users'));

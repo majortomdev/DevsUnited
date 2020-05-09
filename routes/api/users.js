@@ -42,9 +42,9 @@ router.post('/bilbo', [//so im basically checking here for 3 objcts name, email,
     });
 
     //ill encrypt the password
-    // const salt = await bcrypt.genSalt(10);
-    // user.password = await bcrypt.hash(password, salt);
-    user.password = password;
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(password, salt);
+    //user.password = password;
     await user.save();
     // to return a jsonwebtoken
     res.send('User Registererd');

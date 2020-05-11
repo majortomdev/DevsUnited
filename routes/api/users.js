@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const gravatar= require('gravatar');
 const bcrypt= require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const config = require('config');
 const { check, validationResult } = require('express-validator/check');
 const User = require('../../models/User')//to bring in my user model
 // @route   POST api/users
@@ -44,10 +46,23 @@ router.post('/bilbo', [//so im basically checking here for 3 objcts name, email,
     //ill encrypt the password
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
-    //user.password = password;
+     
     await user.save();
     // to return a jsonwebtoken
-    res.send('User Registererd');
+    const payload = {
+        user: {
+            id: user.id
+        }
+    }
+    jwt.sign(
+        payload, 
+        config.get('jwtSecret'),
+        { expiresIn: 360000},
+        (err, token) => {
+            if(err) throw err;
+            res.json({ token });
+        });
+    //res.send('User Registererd');
     }catch(err){
         console.error(err.message);
         res.status(500).send('Server error');

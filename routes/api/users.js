@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 const config = require('config');
 const { check, validationResult } = require('express-validator');
 const User = require('../../models/User')//to bring in my user model
-// @route   POST api/users
+// @route   POST api/users/bilbo
 // @desc    Register user
 // @access  Public
 //    can incoportate some validation of the request/ info entered.....

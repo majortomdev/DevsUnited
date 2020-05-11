@@ -17,5 +17,5 @@ app.use('/api/profile', require('./routes/api/profile'));
 
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => console.log(`SErver started on port ${PORT}`));
+app.listen(PORT, () => console.log(`SErvEr started on port ${PORT}`));
 // added in a callback fn for after connection

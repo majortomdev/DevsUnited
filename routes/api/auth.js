@@ -14,6 +14,7 @@ const config = require('config');
 router.get('/akey', auth, async (req,res) => {
     try {//using a try catch here (and labelled it async)cos im going to make call to db...
         const user = await User.findById(req.user.id).select('-password'); //
+        //const user = await User.findById(req.user.id);
         res.json(user);
     } catch (err) {
         console.error(err.message);

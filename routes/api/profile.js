@@ -10,7 +10,7 @@ const User = require('../../models/User');
 // @desc    get current user's profile
 // @access  private  
 router.get('/me', auth, async (req,res) => {
-    try {
+    try {//this 
         const profile = await Profile.findOne({ user: req.user.id }).populate('user',
         ['name', 'avatar']);
 
@@ -66,7 +66,7 @@ async (req, res) => {
     if(linkedin) profileProps.social.linkedin = linkedin;
     if(instagram) profileProps.social.instagram = instagram;
     
-    try {
+    try {//i can user "user: req.user.id" because i have access to the token.....
         let profile = await Profile.findOne({ user: req.user.id });
         //iv used my Profile object to query DB for a profile with this current users id
         if(profile) { //update
@@ -75,12 +75,12 @@ async (req, res) => {
                 { $set: profileProps },
                 { new: true }
                 );
-
+                console.log("this today user is : "+req.user.id);
             return res.json(profile);        
         }
         //or if theres not one found then we shall create one
         profile = new Profile(profileProps);
-
+        
         await profile.save();
         res.json(profile);
 
@@ -123,6 +123,22 @@ router.get('/user/:user_id', async (req, res) => {
         }//cant get this firing-> its for catching get requests with dud ids of unexpected length....
         //changed it to err.name= 'CastError', worked...read it from error props when sent err to console...
         res.status(500).send("SerVER error<get profile by id method>");
+    }
+})
+
+// @route   DELETE api/profile
+// @desc    Delete profile, user and posts
+// @access  private
+
+router.delete('/',auth, async (req, res) => {
+    try {//remove profile....:
+        await Profile.findOneAndRemove({user: req.user.id});
+
+        await User.findOneAndRemove({ _id: req.user.id});
+        res.json({ msg: 'User Deleted'});
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send("SerVER error<get all profiles method>");
     }
 })
 

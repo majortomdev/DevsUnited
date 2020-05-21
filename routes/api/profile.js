@@ -197,4 +197,37 @@ router.delete('/experience/:exp_id', auth, async (req,res) => {
     }
 })
 
+// @route   PUT api/profile/education
+// @desc    Add profile education
+// @access  private
+
+router.put('/education', [auth, [check('course','course is required').not().isEmpty(),
+    check('institute','institute is required').not().isEmpty()]], 
+    async (req, res) => {
+        const errors = validationResult(req);
+        if(!errors.isEmpty()) {
+            return res.status(400).json({ errors: errors.array() });
+        }
+
+        const {
+            course, institute, from, to, grade
+        } = req.body;
+        //so as with experince, whatvr is in body i wll map to a new education object to add to profile
+        const newEducation = { course, institute, from, to, grade };
+
+        try {
+            const profile = await Profile.findOne({ user: req.user.id });
+
+            profile.education.unshift(newEducation);
+    
+            await profile.save();
+    
+            res.json(profile);
+        } catch (err) {
+            console.error(err.message);
+            res.status(500).send('SerVER error in PUT exp. method');
+        }
+
+    })
+
 module.exports= router;

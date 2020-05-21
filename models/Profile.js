@@ -59,15 +59,11 @@ const ProfileSchema = new mongoose.Schema({
       ],
       education: [
         {
-          school: {
+          course: {
             type: String,
             required: true
           },
-          degree: {
-            type: String,
-            required: true
-          },
-          fieldofstudy: {
+          institute: {
             type: String,
             required: true
           },
@@ -78,12 +74,9 @@ const ProfileSchema = new mongoose.Schema({
           to: {
             type: Date
           },
-          current: {
-            type: Boolean,
+          grade: {
+            type: String,
             default: false
-          },
-          description: {
-            type: String
           }
         }
       ],

@@ -13,8 +13,8 @@ const config = require('config');
 //here i just added 'auth' to my get directive as another(2nd) parameter.....
 router.get('/akey', auth, async (req,res) => {
     try {//using a try catch here (and labelled it async)cos im going to make call to db...
-        const user = await User.findById(req.user.id).select('-password'); //
-        //const user = await User.findById(req.user.id);
+        const user = await User.findById(req.user.id).select('-password'); // to make sure to disclude..
+        // ....the password in the resultset
         res.json(user);
     } catch (err) {
         console.error(err.message);

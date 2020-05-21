@@ -181,11 +181,11 @@ check('from','From date is required').not().isEmpty()
 // @access  private
 
 router.delete('/experience/:exp_id', auth, async (req,res) => {
-    try {
+    try {//again i can get the user.id from the token in the header so req.user.id will get me the id i want
         const profile = await Profile.findOne({ user: req.user.id });
         //Get remove index
-        const removeIndex = profile.experience.map(item => item.id).indexOf
-        (req.params.exp_id);
+        const removeIndex = profile.experience.map(item => item.id).indexOf//and this will scan my profile..
+        (req.params.exp_id);// ..... for the object in it with the passed id(exp_id) -> a mongo object id
         console.log("removeIndex: "+removeIndex);
         profile.experience.splice(removeIndex, 1);
 
@@ -225,9 +225,30 @@ router.put('/education', [auth, [check('course','course is required').not().isEm
             res.json(profile);
         } catch (err) {
             console.error(err.message);
-            res.status(500).send('SerVER error in PUT exp. method');
+            res.status(500).send('SerVER error in PUT education method');
         }
 
     })
+
+// @route   DELETE api/profile/education/:educ_id
+// @desc    Delete education from profile
+// @access  private
+
+router.delete('/education/:educ_id', auth, async (req,res) => {
+    try {
+        const profile = await Profile.findOne({ user: req.user.id });
+        //Get remove index
+        const removeIndex = profile.education.map(item => item.id).indexOf
+        (req.params.educ_id);
+        console.log("removeIndex: "+removeIndex);
+        profile.education.splice(removeIndex, 1);
+
+        await profile.save();
+        res.json(profile);
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('SerVER error in DELETE education method');
+    }
+})
 
 module.exports= router;

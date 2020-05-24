@@ -19,7 +19,7 @@ router.get('/me', auth, async (req,res) => {
         if(!profile){
             return res.status(400).json({msg: 'There is no profile for this geezer'});
         }
-        res.json(profile);
+        res.json(profile);//so this GET endpoint sends my profile to the response
     } catch (err) {
         console.error(err.message);
         res.status(500).send('ServEr ErrOr');

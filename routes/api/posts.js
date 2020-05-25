@@ -71,10 +71,7 @@ router.get('/rambling/:id', authMe, async (req,res) => {
         }
         res.status(500).send('SErvER error');
     }
-})
-
-
-
+});
 
 // @route   DELETE api/posts/:id
 // @desc    delete a post by id
@@ -100,6 +97,54 @@ router.delete('/rambling/:id', authMe, async (req,res) => {
         }
         res.status(500).send('SErvER error');
     }
-})
+});
+
+// @route   PUT api/posts/like/:id
+// @desc    like a post
+// @access  Private
+router.put('/like/:id',authMe, async(req,res) => {
+    try {
+        console.log("made it past first...")
+        const post = await Post.findById(req.params.id);
+    //myst check if post has alreadt been liked by this user
+    if(post.likes.filter(like => like.user.toString() === req.user.id).length >0 ){
+        return res.status(400).json({ msg: 'Post already liked' });
+    }
+
+    post.likes.unshift({ user: req.user.id });
+
+    await post.save();
+
+    res.json(post.likes);
+    } catch (oops) {
+        console.error;
+        res.status(500).send('Server Error in PUT likes...')
+    }
+});
+
+// @route   PUT api/posts/unlike/:id
+// @desc    Unlike a post
+// @access  Private
+router.put('/unlike/:id',authMe, async(req,res) => {
+    try {
+        console.log("made it past first...")
+        const post = await Post.findById(req.params.id);
+     
+    if(post.likes.filter(like => like.user.toString() === req.user.id).length === 0 ){
+        return res.status(400).json({ msg: 'Post has not yet been liked' });
+    }
+    // to get an index i can remove with
+    const removeIndex = post.likes.map(like => like.user.toString()).indexOf(req.user.id);
+
+    post.likes.splice(removeIndex, 1);
+
+    await post.save();
+
+    res.json(post.likes);
+    } catch (oops) {
+        console.error;
+        res.status(500).send('Server Error in PUT unlikes...')
+    }
+});
 
 module.exports= router;

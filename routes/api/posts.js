@@ -147,4 +147,70 @@ router.put('/unlike/:id',authMe, async(req,res) => {
     }
 });
 
+
+
+// @route   POST api/posts/comment/:id
+// @desc    comment on a post
+// @access  Private
+router.post('/rambling/comment/:id',[authMe, [
+    check('text','need some text for a comment!!').not().isEmpty()
+]], async (req,res) => {
+    const errors = validationResult(req);
+    if(!errors.isEmpty()){
+        return res.status(400).json({ errors: errors.array()});
+    }
+
+    try {
+        const user = await User.findById(req.user.id).select('-password');
+        const post = await Post.findById(req.params.id);
+        const newComment = {
+            text: req.body.text,
+            name: user.name,
+            avatar: user.avatar,
+            user: req.user.id
+        };
+        
+        post.comments.unshift(newComment);
+       
+        await post.save();
+
+        res.json(post.comments);
+    } catch (oops) {
+        console.error(oops.message);
+        res.status(500).send('Server Error in POST comment method..');
+    }
+
+});
+
+// @route   DELETE api/posts/comment/:id/:comment_id
+// @desc    delete a comment
+// @access  Private
+router.delete('/rambling/comment/:id/:comment_id', authMe, async (req, res) => {
+    try {//first get the post by its id using mongomagic... -> :
+        const post = await Post.findById(req.params.id);//...then pull out the comment from that...:
+ //i will find it by using a function<forEach/ map etc type >to map thru them until ids match....       
+        const comment = post.comments.find(comment => comment.id === req.params.comment_id);
+//quick check to see comment exists, and then also if person owns it/ is authorised to delete it...
+        if(!comment) {
+            return res.status(404).json({ msg: 'Comment doesnt actually exist there boss' });
+        }
+        if(comment.user.toString() !== req.user.id) {
+            return res.status(401).json({ msg: "Are you sure you have the right to delete this?" });
+        }
+
+        const removeIndex = post.comments
+            .map(comment => comment.user.toString())
+            .indexOf(req.user.id);
+
+        post.comments.splice(removeIndex, 1);
+        
+        await post.save();
+
+        res.json(post.comments);
+    } catch (oops) {
+        console.error(oops.message);
+        res.status(500).send('Server Error in DELETE comment method..');
+    }
+})
+
 module.exports= router;

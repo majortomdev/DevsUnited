@@ -4,8 +4,8 @@
   "description": "Developers collaborate here",
   "main": "server.js",
   "scripts": {
-    "start": "node server",
-    "server": "nodemon server"
+    "start": "node server1",
+    "server": "nodemon server1"
   },
   "author": "Joseph Kinahan",
   "license": "ISC",

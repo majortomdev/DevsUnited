@@ -1,4 +1,6 @@
 {
     "mongoURI": "mongodb+srv://majortomdev:majortomdev@ducluster-nnwnt.mongodb.net/test?retryWrites=true&w=majority",
-    "jwtSecret": "mysecrettoken"
+    "jwtSecret": "mysecrettoken",
+    "githubClientId":"110a539fcd97026d91302a3e77b8c12ff68cfb58",
+    "githubSecret":"110a539fcd97026d91302a3e77b8c12ff68cfb58"
 }

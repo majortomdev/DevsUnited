@@ -7,7 +7,7 @@
     "start": "node server1",
     "server": "nodemon server1",
     "client": "npm start --prefix client", 
-    "dev": "concurrently \"npm run server\"\"npm run client\"" 
+    "dev": "concurrently \"npm run server\" \"npm run client\"" 
   },
   "author": "Joseph Kinahan",
   "license": "ISC",

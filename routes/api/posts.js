@@ -12,20 +12,20 @@ const User = require('../../models/User');
 // @access  Private
 router.post('/rambling',[authMe, [
     check('text','need some text for a post!!').not().isEmpty()
-]], async (req,res) => {
-    const errors = validationResult(req);
+]], async (req12,res) => {
+    const errors = validationResult(req12);
     if(!errors.isEmpty()){
         return res.status(400).json({ errors: errors.array()});
     }
 
     try {
-        const user = await User.findById(req.user.id).select('-password');
+        const user = await User.findById(req12.user.id).select('-password');
 
         const newPost = new Post({
-            text: req.body.text,
+            text: req12.body.text,
             name: user.name,
             avatar: user.avatar,
-            user: req.user.id
+            user: req12.user.id
         });
 
         const post = await newPost.save();

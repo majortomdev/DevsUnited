@@ -1,17 +1,17 @@
 const mongoose = require('mongoose');
 
 const ProfileSchema = new mongoose.Schema({
-    user: {
+    user: {// player
         type: mongoose.Schema.Types.ObjectId,
         ref: 'user'
     },
-    company: {
+    company: { //team? club? 
         type: String
       },
-      website: {
+      website: {//delete...
         type: String
       },
-      location: {
+      location: {//....think....
         type: String
       },
       status: {
